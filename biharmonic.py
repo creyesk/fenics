@@ -48,7 +48,7 @@ u = Function(V)
 solve(a == L, u, bc)
 
 # Save solution to file
-file = File("biharmonic.pvd")
+file = File("BH_eigen/biharmonic.pvd")
 file << u
 
 # Plot solution
