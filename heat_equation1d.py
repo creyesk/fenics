@@ -9,21 +9,26 @@ class PeriodicBoundary(SubDomain):
    def map(self, x, y):
       y[0] = x[0] - 1.0
 
-T = 1
-num_steps = 200
+T = 0.01
+num_steps = 10
 dt = T / num_steps
 
-nx = 200
+nx = 20000
 mesh = UnitIntervalMesh(nx)
 V = FunctionSpace(mesh, "CG", 2, constrained_domain=PeriodicBoundary())
 
-u_0 = Expression('exp(-pow(x[0] - 0.5, 2)*16) - exp(-pow(0.5, 2)*16)', degree=2)
+# p1 = Expression('4*(x[0]-0.25)', degree=1)
+# p2 = Expression('4*(0.75-x[0])', degree=1)
+# u_0 = Expression('x[0] < 0.25 ? 0 : (x[0] < 0.5 ? p1 : (x[0] < 0.75 ? p2 : 0))',
+#                  p1=p1, p2=p2, degree=2)
+u_0 = Expression('exp(-pow(x[0] - 0.5, 2)*16) - exp(-pow(0.5, 2)*16)',
+                 degree=2)
 
 # u_0 = Expression('x[0]<=0.5 ? 2*x[0] : 2 - 2*x[0]', degree=1)
 
 
-# phi = Expression('sin(2*pi*x[0]) + 0.1', degree=2)
-phi = Constant(1)
+phi = Expression('sin(2*pi*(x[0]-0.25))', degree=2)
+# phi = Constant(1)
 u_n = interpolate(u_0, V)
 phi = interpolate(phi, V)
 
@@ -55,11 +60,6 @@ for n in range(num_steps):
 
     # Plot solution
     # plot(u)
-
-    # Compute error at vertices
-    u_e = interpolate(u_0, V)
-    error = np.abs(u_e.vector().get_local() - u.vector().get_local()).max()
-    print('t = %.2f: error = %.3g' % (t, error))
 
     # Update previous solution
     u_n.assign(u)
