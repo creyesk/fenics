@@ -23,8 +23,7 @@ p1 = Expression('4*(x[0]-0.25)', degree=1)
 p2 = Expression('4*(0.75-x[0])', degree=1)
 u_0 = Expression('x[0] < 0.25 ? 0 : '
                  '(x[0] < 0.5 ? p1 : '
-                 '(x[0] < 0.75 ? p2 : 0))',
-                 p1=p1, p2=p2, degree=1)
+                 '(x[0] < 0.75 ? p2 : 0))', p1=p1, p2=p2, degree=1)
 
 # Define the potential
 phi = Expression('pow(sin(8*pi*(x[0]-0.25)), 2) + 0.1', degree=1)
