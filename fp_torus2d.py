@@ -54,7 +54,7 @@ dofs = dofmap.dofs(mesh, 0)
 from fenics import *
 from matplotlib import pyplot as plt
 
-T = 0.05
+T = 2
 num_steps = 100
 dt = T / num_steps
 
@@ -84,8 +84,9 @@ mesh = UnitSquareMesh(100, 100)
 V1 = FunctionSpace(mesh, 'CG', 1, constrained_domain=pbc)
 # pdb.set_trace()
 
-# phi = Expression('sin(2*pi*x[0])*sin(2*pi*x[1]) + 0.1', degree=2)
+# phi = Expression('sin(2*pi*x[0])*sin(2*pi*x[1])', degree=2)
 # phi = interpolate(phi, V1)
+
 phi = Function(V2)
 phi.vector()[:] = rx.get_local()*100
 phi = interpolate(phi, V1)
@@ -97,8 +98,9 @@ u_n = interpolate(u_0, V1)
 # Weak functional formulation a(u_{n+1}, v) = L(u_{n})
 u = TrialFunction(V1)
 v = TestFunction(V1)
-alpha = 0
-a = u*v*dx + dt*dot(-alpha*grad(abs(phi))*u + grad(u*pow(phi,2)), grad(v))*dx
+alpha = 0.0
+epsilon = 0.01
+a = u*v*dx + dt*dot(-alpha*grad(abs(phi))*u + grad(u*(pow(phi,2)+epsilon)), grad(v))*dx
 L = u_n*v*dx
 
 u = Function(V1)
