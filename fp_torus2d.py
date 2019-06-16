@@ -1,6 +1,4 @@
 from dolfin import *
-import numpy as np
-import pdb
 
 # Create mesh and define function space
 mesh = UnitSquareMesh(100, 100)

@@ -2,8 +2,8 @@ from fenics import *
 import numpy as np
 from matplotlib import pyplot as plt
 
-T = 0.1
-num_steps = 100
+T = 0.05
+num_steps = 500
 dt = T / num_steps
 
 class PeriodicBoundary(SubDomain):
@@ -26,7 +26,7 @@ u_0 = Expression('x[0] < 0.25 ? 0 : '
                  '(x[0] < 0.75 ? p2 : 0))', p1=p1, p2=p2, degree=1)
 
 # Define the potential
-phi = Expression('pow(sin(8*pi*(x[0]-0.25)), 2) + 0.1', degree=1)
+phi = Expression('pow(sin(4*pi*(x[0]-0.25)), 2) + 0.1', degree=1)
 phi = interpolate(phi, V)
 
 # Initialize u_n sequence
@@ -54,7 +54,7 @@ for n in range(num_steps):
 
     # Compute solution
     solve(a == L, u)
-    
+
     vtkfile << u
 
     # Update previous solution
